@@ -18,7 +18,7 @@ export default function App() {
     let [silverdata,setsilverdata]=useState({});
 
     var myHeaders = new Headers();
-  myHeaders.append("x-access-token", "goldapi-xjk0natkwrwiezs-io");
+  myHeaders.append("x-access-token", "goldapi-4a9pg2tkwt5bxjz-io");
   myHeaders.append("Content-Type", "application/json");
   
   var requestOptions = {
@@ -27,17 +27,30 @@ export default function App() {
     redirect: 'follow'
   };
   useEffect(() => {
+   
     fetch("https://www.goldapi.io/api/XAU/INR", requestOptions)
     .then(response => response.json())
-    .then(result => {setData(result);})
-    .catch(error => console.log('error', error));
+    .then(result => {setData(result);});
   }, []);
-
   useEffect(() => {
     fetch("https://www.goldapi.io/api/XAG/INR", requestOptions)
     .then(response => response.json())
-    .then(result => {setsilverdata(result);})
-    .catch(error => console.log('error', error));
+    .then(result => {setsilverdata(result);});
+  
+}, []);
+
+  useEffect(() => {
+    setInterval(()=>{
+    fetch("https://www.goldapi.io/api/XAU/INR", requestOptions)
+    .then(response => response.json())
+    .then(result => {setData(result);});},20000)
+  }, []);
+
+  useEffect(() => {
+      setInterval(()=>{fetch("https://www.goldapi.io/api/XAG/INR", requestOptions)
+      .then(response => response.json())
+      .then(result => {setsilverdata(result);});},20000)
+    
   }, []);
  
 
@@ -50,8 +63,9 @@ export default function App() {
         <Card>
         <Card.Title>GOLD</Card.Title>
         <Card.Divider/>
-        <Card.Image source={require('./assets/photo.jpg')} /> 
+        <Image source={require('./assets/photo.jpg')} style={styles.Img} /> 
         <Card.Divider/>
+        
           <Text style={{marginBottom: 10}}>
            Current Price= {data.price}
           </Text>
@@ -67,16 +81,17 @@ export default function App() {
           <Text style={{marginBottom: 10}}>
            High Price= {data.high_price}
           </Text>
+          <Card.Divider/>
           <Button
-            icon={<Icon name='code' color='#ffffff' />}
-            buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0}}
-            title='BUY NOW' />
+        title="Buy Now"
+        onPress={() => Alert.alert('Simple Button pressed')}
+      />
         
       </Card>
       <Card>
         <Card.Title>SILVER</Card.Title>
         <Card.Divider/>
-        <Card.Image source={require('./assets/silver.jpg')} /> 
+        <Image source={require('./assets/silver.jpg')} style={styles.Img}/> 
         <Card.Divider/>
           <Text style={{marginBottom: 10}}>
            Current Price= {silverdata.price}
@@ -93,10 +108,11 @@ export default function App() {
           <Text style={{marginBottom: 10}}>
            High Price= {silverdata.high_price}
           </Text>
+          <Card.Divider/>
           <Button
-            icon={<Icon name='code' color='#ffffff' />}
-            buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0}}
-            title='BUY NOW' />
+        title="Buy Now"
+        onPress={() => Alert.alert('Simple Button pressed')}
+      />
         
       </Card>
         </ScrollView>
@@ -131,4 +147,8 @@ const styles = StyleSheet.create({
       backgroundColor: '#fff',
       
     },
+    Img:{
+        height:150,
+        width:300
+    }
   });
